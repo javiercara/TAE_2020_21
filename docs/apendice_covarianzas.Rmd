@@ -1,0 +1,35 @@
+---
+title: "Matrices de covarianzas"
+output: 
+  html_document:
+    number_sections: true
+    toc: true
+  pdf_document:
+    number_sections: true
+    toc: true
+---
+
+Sean k+1 variables, con $n$ observaciones cada una:
+
+$$
+\begin{matrix}
+y & x_{1} & x_{2} & \cdots & x_{k} \\
+\hline
+y_1 & x_{11} & x_{21} & \cdots  & x_{k1} \\
+y_2 & x_{12} & x_{22} & \cdots  & x_{k2} \\
+\cdots &\cdots & \cdots & \cdots  & \cdots \\
+y_n & x_{1n} & x_{2n} & \cdots  & x_{kn} \\
+\end{matrix}
+$$
+
+se define la covarianza entre las variables $x_j$ e $y$ como
+
+$$
+cov(x_{j},y) = S_{jy} = \frac{\sum_{i}(x_{ji} - \bar x_j)(y_i - \bar y)}{n-1}, \quad j \in [1,k], \quad i \in [1,n]
+$$
+
+y la covarianza entre las variables $x_r$ e $x_s$ como
+
+$$
+cov(x_{j},x_{k}) = S_{jk} = \frac{\sum_{i}(x_{ji} - \bar x_j)(x_{ki} - \bar x_{k})}{n-1}, \quad j \in [1,k], \quad i \in [1,n]
+$$
