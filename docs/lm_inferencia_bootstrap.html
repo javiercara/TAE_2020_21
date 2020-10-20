@@ -1565,7 +1565,7 @@ var(medianas)</code></pre>
 <pre><code>## [1] 10.22714</code></pre>
 </div>
 <div id="estimación-de-intervalos-de-confianza-utilizando-bootstrap" class="section level1">
-<h1><span class="header-section-number">3</span> EStimación de intervalos de confianza utilizando bootstrap</h1>
+<h1><span class="header-section-number">3</span> Estimación de intervalos de confianza utilizando bootstrap</h1>
 <p>Hay varios métodos para calcular el intervalo de confianza de un parámetro <span class="math inline">\(\theta\)</span> con bootstrap. Nosotros vamos a utilizar el método de los percentiles:</p>
 <ul>
 <li>Paso 1: generar, mediante simulación, una muestra con reemplazamiento a partir de <span class="math inline">\(\{X_1, X_2, \cdots,X_n\}\)</span> que llamaremos <span class="math inline">\(\{X_1^*, X_2^*, \cdots,X_n^*\}\)</span>.</li>
@@ -1575,11 +1575,12 @@ var(medianas)</code></pre>
 </ul>
 <p>Supongamos que el número de viajeros de un día determinado tiene distribución normal: <span class="math inline">\(X_i \sim N(\mu,\sigma)\)</span>. Vamos a calcular el intervalo de confianza de <span class="math inline">\(\mu\)</span>. El intervalo teórico se calcula</p>
 <p><span class="math display">\[
-\bar x \pm z_{\alpha/2}*\sqrt{\frac{s_x^2}{n}}
+\bar x \pm t_{\alpha/2;n-1}*\sqrt{\frac{s_x^2}{n}}
 \]</span></p>
 <pre class="r"><code>alfa = 0.05
-c(mean(x) + qnorm(alfa/2)*sqrt(var(x)/length(x)), mean(x) - qnorm(alfa/2)*sqrt(var(x)/length(x)) )</code></pre>
-<pre><code>## [1] 50.31918 58.51415</code></pre>
+n = length(x)
+c(mean(x) + qt(alfa/2, n-1)*sqrt(var(x)/length(x)), mean(x) - qt(alfa/2, n-1)*sqrt(var(x)/length(x)) )</code></pre>
+<pre><code>## [1] 49.81530 59.01803</code></pre>
 <p>Vamos a calcularlo con bootstrap:</p>
 <pre class="r"><code>set.seed(123)
 B = 1000

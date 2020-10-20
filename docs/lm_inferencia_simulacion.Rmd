@@ -4,6 +4,7 @@ output:
   html_document:
     number_sections: true
     toc: true
+    toc_float: true
   pdf_document:
     number_sections: true
     toc: true

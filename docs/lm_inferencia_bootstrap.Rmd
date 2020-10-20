@@ -1,13 +1,13 @@
 ---
 title: "Bootstrap"
 output: 
-  pdf_document:
-    number_sections: true
-    toc: true
   html_document:
     number_sections: true
     toc: true
     toc_float: true
+  pdf_document:
+    number_sections: true
+    toc: true
 ---
 
 # Introducción
@@ -78,7 +78,7 @@ for (b in 1:B){
 var(medianas)
 ```
 
-# EStimación de intervalos de confianza utilizando bootstrap
+# Estimación de intervalos de confianza utilizando bootstrap
 
 Hay varios métodos para calcular el intervalo de confianza de un parámetro $\theta$ con bootstrap. Nosotros vamos a utilizar el método de los percentiles:
 
@@ -90,12 +90,13 @@ Hay varios métodos para calcular el intervalo de confianza de un parámetro $\t
 Supongamos que el número de viajeros de un día determinado tiene distribución normal: $X_i \sim N(\mu,\sigma)$. Vamos a calcular el intervalo de confianza de $\mu$. El intervalo teórico se calcula
 
 $$
-\bar x \pm z_{\alpha/2}*\sqrt{\frac{s_x^2}{n}}
+\bar x \pm t_{\alpha/2;n-1}*\sqrt{\frac{s_x^2}{n}}
 $$
 
 ```{r}
 alfa = 0.05
-c(mean(x) + qnorm(alfa/2)*sqrt(var(x)/length(x)), mean(x) - qnorm(alfa/2)*sqrt(var(x)/length(x)) )
+n = length(x)
+c(mean(x) + qt(alfa/2, n-1)*sqrt(var(x)/length(x)), mean(x) - qt(alfa/2, n-1)*sqrt(var(x)/length(x)) )
 ```
 
 Vamos a calcularlo con bootstrap:

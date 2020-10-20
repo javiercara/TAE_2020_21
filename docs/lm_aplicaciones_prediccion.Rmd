@@ -64,7 +64,7 @@ $$
 Es un estimador centrado del valor medio de $y_p$, $E[y_p]$:
 
 $$
-E[\hat y_p] = E[x_p^T \hat \beta] = x_p^T \beta
+E[\hat y_p] = E[x_p^T \hat \beta] = x_p^T E[\hat \beta] = x_p^T \beta
 $$
 
 Y con varianza:
@@ -73,7 +73,7 @@ $$
 Var[\hat y_p] = Var[x_p^T \hat \beta] = x_p^T Var[\hat \beta] x_p = \sigma^2 x_p^T (X^TX)^{-1} x_p
 $$
 
-Por tanto
+Como $\hat \beta$ tiene distribución normal, se tiene que:
 
 $$
 \hat y_p \sim N(x_p^T \beta, \sigma^2 x_p^T (X^TX)^{-1} x_p) \Rightarrow \frac{\hat y_p - x_p^T \beta}{\hat s_R\sqrt{x_p^T (X^TX)^{-1} x_p}} \sim t_{n-k-1}
@@ -85,22 +85,23 @@ $$
 x_p^T \hat \beta - t_{\alpha/2} \hat s_R\sqrt{x_p^T (X^TX)^{-1} x_p} \leq (x_p^T \beta) \leq x_p^T \hat \beta + t_{\alpha/2} \hat s_R\sqrt{x_p^T (X^TX)^{-1} x_p}
 $$
 
+Recordad que los intervalos de confianza se definen para parámetros del modelo. En este caso el intervalo de confianza se ha definido para una combinación lineal de parámetros.
 
 # Intervalo de predicción
 
-El valor real de la predicción para $x_p$ es $y_p$ y no $x_p^T \hat \beta$. Efectívamente, tenemos un error de predicción:
+El valor real para $x_p$ es $y_p$ y no $x_p^T \hat \beta$. Por tanto, si utilizamos como predicción de $y_p$ el valor $\hat y_p = x_p^T \hat \beta$ tenemos un error de predicción:
 
 $$
-y_p = x_p^T \hat \beta + e_p
+\epsilon_p = y_p - \hat y_p = y_p - x_p^T \hat \beta
 $$
 
-Sabemos que
+La variable aleatoria $\epsilon_p$ no es un residuo. Los residuos se definen para datos observados. Tenemos que suponer que $y_p$ verifica la ecuación del modelo, esto es, $y_p = x_p^T \beta + u_p$, donde $u_p \sim N(0,\sigma^2)$. Entonces
 
 $$
 y_p \sim N(x_p^T \beta, \sigma^2)
 $$
 
-Nos gustaría construir un intervalo $(a,b)$ para la predicción tal que:
+Nos gustaría construir un intervalo $(a,b)$ para la $y_p$ tal que:
 
 $$
 P(a \leq y_p \leq b) = 1-\alpha
@@ -111,39 +112,39 @@ Sin enbargo no podemos utilizar la distribución de $y_p$ ya que desconocemos $\
 Por otro lado, acabamos de encontrar que
 
 $$
-x_p^T \hat \beta \sim N(x_p^T \beta, x_p^T (X^TX)^{-1} x_p)
+x_p^T \hat \beta \sim N(x_p^T \beta, \sigma^2 x_p^T (X^TX)^{-1} x_p)
 $$
 
-Por tanto podemos averiguar la distribución de $e_p$:
+Por tanto podemos averiguar la distribución de $\epsilon_p$:
 
 $$
-e_{p} = y_p - x_p^T \hat \beta
+\epsilon_p = y_p - x_p^T \hat \beta
 $$
 
 $$
-\boxed{ e_p \sim N(0, \sigma^2(1 + x_p^T (X^TX)^{-1} x_p)) }
+\boxed{ \epsilon_p \sim N(0, \sigma^2(1 + x_p^T (X^TX)^{-1} x_p)) }
 $$
 
 ya que:
 
 $$
-E[e_p] = E[y_p] - x_p^T E[\hat \beta] = x_p^T \beta - x_p^T \beta = 0
+E[\epsilon_p] = E[y_p] - x_p^T E[\hat \beta] = x_p^T \beta - x_p^T \beta = 0
 $$
 
 $$
-Var[e_p] = Var[y_p] + Var[x_p^T \hat \beta] = \sigma^2 + x_p^T Var[\hat \beta] x_p= \sigma^2 (1 + x_p^T (X^TX)^{-1} x_p)
+Var[\epsilon_p] = Var[y_p] + Var[x_p^T \hat \beta] = \sigma^2 + x_p^T Var[\hat \beta] x_p= \sigma^2 (1 + x_p^T (X^TX)^{-1} x_p)
 $$
 
-Utilizando la varianza residual tenemos:
+donde se ha considerado que $y_p$ e $\hat y_p$ son independientes. Utilizando la varianza residual tenemos:
 
 $$
-\frac{e_p}{\hat s_R\sqrt{1 + x_p^T (X^TX)^{-1} x_p}} \sim t_{n-k-1}
+\frac{\epsilon_p}{\hat s_R\sqrt{1 + x_p^T (X^TX)^{-1} x_p}} \sim t_{n-k-1}
 $$
 
 Con lo que se puede encontrar que:
 
 $$
-P \left( - t_{\alpha/2} \hat s_R\sqrt{1 + x_p^T (X^TX)^{-1} x_p} \leq e_p \leq t_{\alpha/2} \hat s_R\sqrt{1 + x_p^T (X^TX)^{-1} x_p} \right) = 1 - \alpha
+P \left( - t_{\alpha/2} \hat s_R\sqrt{1 + x_p^T (X^TX)^{-1} x_p} \leq \epsilon_p \leq t_{\alpha/2} \hat s_R\sqrt{1 + x_p^T (X^TX)^{-1} x_p} \right) = 1 - \alpha
 $$
 
 Finalmente, el intervalo para $y_p$ que estábamos buscando se calcula como:
@@ -153,6 +154,13 @@ P \left( x_p^T \hat \beta - t_{\alpha/2} \hat s_R\sqrt{1 + x_p^T (X^TX)^{-1} x_p
 $$
 
 Esto no es un intervalo de confianza ya que $y_p$ no es un parámetro, sino que es un intervalo de probabilidad ($y_p$ es una variable aleatoria).
+
+# Conclusiones
+
+Sea un valor para los regresores $x_p$. Según el modelo $y_p = x_p^T \beta + u_p, \ u_p \sim N(0, \sigma^2)$:
+
+- Si queremos asignar un *valor puntual* para la predicción de $y_p$ utilizaremos $\hat y_p = x_p^T \hat \beta$, que es un estimador centrado de $x_p^T \beta$.
+- Si queremos construir un intervalo para la predicción en el punto $x_p$ utilizaremos el intervalo de $y_p$.
 
 # Ejemplo
 
@@ -179,7 +187,9 @@ beta_e = coef(m)
 sR2 = sum(resid(m)^2)/(n-2)
 X = model.matrix(m)
 mat = t(xp) %*% solve(t(X) %*% X) %*% xp
+# predicción puntual
 (yp_medio = t(xp) %*% beta_e)
+# intervalo de confianza
 yp_medio[1,1] + c(-1,1)*qt(0.975,n-2)*sqrt(sR2*(mat[1,1]))
 ```
 
@@ -237,7 +247,12 @@ summary(m2)
 
 ### Prediccion del valor medio
 
-Recordamos que el modelo sería: $kid\_score = \hat \beta_0 + \hat \beta_1 mom\_iq + \hat \beta_2 mom\_hssi + \hat \beta_3 mon\_age + \hat \beta_4mom\_worktrabaja23 + \hat \beta_5 mom\_worktrabaja1\_parcial + \hat \beta_6 mom\_worktrabaja1\_completo + e$
+Recordamos que el modelo sería: 
+
+$$
+kid\_score = \hat \beta_0 + \hat \beta_1 mom\_iq + \hat \beta_2 mom\_hssi + \hat \beta_3 mon\_age + \hat \beta_4mom\_worktrabaja23 + \\
+\hat \beta_5 mom\_worktrabaja1\_parcial + \hat \beta_6 mom\_worktrabaja1\_completo + e
+$$
 
 ```{r}
 xp = matrix(c(1, 130, 0, 25, 0, 1, 0), ncol = 1)
@@ -296,27 +311,29 @@ quantile(yp_medio_b, probs = c(0.025, 0.975))
 
 ## Intervalo de predicción
 
-Vamos a calcular el intervalo de predicción utilizando bootstrap. Vamos a utilizar la fórmula:
+Vamos a calcular el intervalo de predicción utilizando la fórmula:
 
 $$
-e_p = y_p - \hat y_p \Rightarrow y_p = \hat y_p + e_p 
+\epsilon_p = y_p - \hat y_p \Rightarrow y_p = \hat y_p + \epsilon_p 
 $$
 
-```{r}
-yp_b = rep(0,B)
-e = resid(m2)
-# los residuos de lm() tienen varianza igual a la varianza residual
-# pero los errores de predicción tienen varianza sR2*(1+mat)
-# hacemos que los errores de prediccion tengan la varianza teorica (e/sR)*sqrt(sR2*(1+mat))
-e1 = e * sqrt(1 + mat[1,1])
-for (b in 1:B){
-  yp_b[b] = yp_medio_b[b] + sample(e1, 1)
-}
-```
-
-Resultados:
+En este caso no se puede utilizar bootstrap. El método bootstrap se utiliza para calcular intervalos de confianza y se basa en remuestrear residuos. Ahora tenemos una variable aleatoria, no unos residuos. Podemos utilizar simulaciones de la variable aleatoria:
 
 ```{r}
+# la variable epsilon_p tiene varianza sR2*(1+mat)
+sR2 = sum(resid(m)^2)/(n-2)
+epsilon_var = sR2*(1 + mat[1,1])
+# simulamos la variable epsilon
+epsilon = rnorm(1000, mean = 0, sd = sqrt(epsilon_var))
+xp = matrix(c(1, 130), ncol = 1)
+yp = t(xp) %*% coef(m)
+yp_b = yp[1,1] + epsilon
 # intervalo de predicccion
 quantile(yp_b, probs = c(0.025, 0.975))
+```
+
+Aunque en este caso, al ser una distribución normal, lo más sencillo es:
+
+```{r}
+qnorm(c(0.025,0.975), mean = yp, sd = sqrt(epsilon_var))
 ```
