@@ -321,12 +321,12 @@ En este caso no se puede utilizar bootstrap. El método bootstrap se utiliza par
 
 ```{r}
 # la variable epsilon_p tiene varianza sR2*(1+mat)
-sR2 = sum(resid(m)^2)/(n-2)
+sR2 = sum(resid(m2)^2)/(n-2)
 epsilon_var = sR2*(1 + mat[1,1])
 # simulamos la variable epsilon
 epsilon = rnorm(1000, mean = 0, sd = sqrt(epsilon_var))
-xp = matrix(c(1, 130), ncol = 1)
-yp = t(xp) %*% coef(m)
+xp = matrix(c(1, 130, 0, 25, 0, 1, 0), ncol = 1)
+yp = t(xp) %*% coef(m2)
 yp_b = yp[1,1] + epsilon
 # intervalo de predicccion
 quantile(yp_b, probs = c(0.025, 0.975))

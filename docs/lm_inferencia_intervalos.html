@@ -1656,8 +1656,8 @@ k = 2 # numero de regresores
 <pre class="r"><code>sR2</code></pre>
 <pre><code>## [1] 328.9028</code></pre>
 <p>Y su intervalo de confianza:</p>
-<pre class="r"><code>c(24*sR2/qchisq(1-0.05/2, df = n-k-1), 24*sR2/qchisq(0.05/2, df = n-k-1))</code></pre>
-<pre><code>## [1] 16.09591 21.02887</code></pre>
+<pre class="r"><code>c((n-k-1)*sR2/qchisq(1-0.05/2, df = n-k-1), (n-k-1)*sR2/qchisq(0.05/2, df = n-k-1))</code></pre>
+<pre><code>## [1] 289.0557 377.6434</code></pre>
 </div>
 
 

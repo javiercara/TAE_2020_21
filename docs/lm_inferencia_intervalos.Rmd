@@ -200,6 +200,6 @@ sR2
 Y su intervalo de confianza:
 
 ```{r}
-c(24*sR2/qchisq(1-0.05/2, df = n-k-1), 24*sR2/qchisq(0.05/2, df = n-k-1))
+c((n-k-1)*sR2/qchisq(1-0.05/2, df = n-k-1), (n-k-1)*sR2/qchisq(0.05/2, df = n-k-1))
 ```
 
