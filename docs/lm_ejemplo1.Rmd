@@ -35,21 +35,31 @@ summary(m1)
 - $\hat \beta_2$ = 0.19. Si mantenemos la inversión en *TV* y *newspaper* constante, un incremento de 1000 $ en TV, por término medio supone un aumento en las ventas de 190 unidades. Según el pvalor, es un parámetro significativo.
 - $\hat \beta_3$ = -0.001. Según el pvalor, es un parámetro **NO** significativo, luego no influye en las ventas. Sin embargo, si analizamos la regresión simple de *newspaper*:
 
+La variable *newspaper* ha resultado no significativa. Puede deberse a dos cosas:
+
+- Que no está relacionada con *sales*. Esto lo comprobamos con una regresión simple:
 
 ```{r}
 m1a = lm(sales ~ newspaper, data = d)
 summary(m1a)
 ```
 
-Si solo invirtiésemos en periódicos aumentarían las ventas. pero cuando tenemos en cuenta las otras variables este efecto desaparece. Parece un resultado contradictorio. Esto es debido a la correlación entre *radio* y *newspaper*:
+luego si está relacionada.
+
+- que no aporte información adicional a la que ya aportan *TV* y *radio*. Esto sucede si la correlación con alguna de las variables es considerable:
 
 ```{r}
 cor(d[,-1])
 ```
 
-Como vemos, la correlación entre radio y newspaper es 0.35, lo que indica que en los mercados donde se invierte en *radio* también se invierte en *newspaper*. 
+Como vemos, la correlación entre radio y newspaper es 0.35, lo que indica que en los mercados donde se invierte en *radio* también se invierte en *newspaper*. Luego parte de la información contenida en *newspaper* ya está contenida en *radio*, luego no aporta información significativa si inclimos las dos variables en el mismo modelo:
 
-Vamos a quitar newspaper:
+```{r}
+m1b = lm(sales ~ radio + newspaper, data = d)
+summary(m1b)
+```
+
+Por tanto, vamos a quitar newspaper:
 
 ```{r}
 m2 = lm(sales ~ TV + radio, data = d)
@@ -65,7 +75,7 @@ plot(m2)
 
 Como vemos, no se cumple linealidad. Una solución simple consiste en usar transformaciones no-lineales de las X. Las más comunes son: $\log(X), \sqrt{X}, X^2, 1/X$.
 
-Podemos comprobar que ninguna de ellas corrige la linealidad:
+Podemos comprobar que ninguna de ellas corrige la linealidad. Sin embargo, si aplicamos logaritmos a la variable respuesta:
 
 ```{r}
 m3 = lm(log(sales) ~ TV + radio, data = d)
@@ -77,7 +87,7 @@ plot(m3)
 summary(m3)
 ```
 
-Se cumplen razonablemente las hipótesis del modelo. Podemos responder a las preguntas:
+se cumplen razonablemente las hipótesis del modelo. Podemos responder a las preguntas:
 
 - ¿Hay relación entre el gasto en publicidad y las ventas?
 
@@ -137,9 +147,9 @@ summary(m4)
 
 El modelo mejora considerablemente el R$^2$. Luego invertir dinero en *radio* también mejora la inversión en *TV*.
 
-$sales = \beta_0 + \beta_1*TV + \beta_2*radio + \beta_3*newspaper + \beta_4*TV*radio + u$
+$sales = \beta_0 + \beta_1*TV + \beta_2*radio + \beta_3*TV*radio + u$
 
-$sales = \beta_0 + (\beta_1 + \beta_4*radio)*TV + \beta_2*radio + \beta_3*newspaper  + u$
+$sales = \beta_0 + (\beta_1 + \beta_3*radio)*TV + \beta_2*radio  + u$
 
 La linealidad también ha mejorado:
 

@@ -41,16 +41,16 @@ Tenemos dos modelos
 - mom_hssi = 0:
 
 $$
-kid\_score_i = \hat \beta_0 + e_i
+kid\_score_i = \beta_0 + u_i
 $$
 
-Como los residuos siempre suman cero:
+Eliminamos el término $u_i$ tomando esperanzas:
 
 $$
-\sum kid\_score_i = \sum \hat \beta_0 + \sum e_i \Rightarrow \frac{1}{n_1}\sum kid\_score_i = \hat \beta_0 
+\mathrm{E}[kid\_score_i] = \beta_0
 $$
 
-Es decir, $\hat \beta_0$ es la media de las puntuaciones de los chicos cuyas madres no han terminado el bachillerato.
+Es decir, $\beta_0$ es la media de las puntuaciones de los chicos cuyas madres no han terminado el bachillerato.
 
 ```{r}
 # lo comprobamos en R
@@ -60,23 +60,21 @@ mean(d$kid_score[d$mom_hs=="no"])
 - mom_hssi = 1:
 
 $$
-kid\_score_i = \hat \beta_0 + \hat \beta_1 mom\_hssi_i + e_i
+kid\_score_i = \beta_0 + \beta_1 + u_i
 $$
 
-Como los residuos suman cero:
-
 $$
-\sum kid\_score_i = \sum \hat \beta_0 + \sum \hat \beta_1 mom\_hssi_i + \sum e_i \Rightarrow \frac{1}{n_2}\sum kid\_score_i = \hat \beta_0 + \hat \beta_1
+\mathrm{E}[kid\_score_i] = \beta_0 + \beta_1
 $$
 
-Luego $\hat \beta_0$ es la diferencia entre la media de las puntuaciones de los chicos cuya madre han terminado y las que no han terminado bachillerato.
+Luego $\beta_1$ es la diferencia entre la media de las puntuaciones de los chicos cuya madre han terminado y las que no han terminado bachillerato.
 
 ```{r}
 # en R
 mean(d$kid_score[d$mom_hs=="si"]) - mean(d$kid_score[d$mom_hs=="no"])
 ```
 
-Estas conclusiones ya las obtuvimos en los primeros temas. Sin embargo, ahora podemos utilizar la inferencia para comprobar si esa diferencia es fruto del azar o no. Por ejemplo, el contraste:
+Estas conclusiones ya las obtuvimos en los primeros temas para los valores estimados con mínimos cuadrados. Sin embargo, ahora utilizamos modelos con parámetros y podemos utilizar la inferencia para comprobar si esa diferencia es fruto del azar o no. Por ejemplo, el contraste:
 
 $$
 H_0: \beta_1 = 0 \\
@@ -110,7 +108,7 @@ m2 = lm(kid_score ~ mom_iq, data = d)
 summary(m2)
 ```
 
-- Interpretación de $\hat \beta_1$: Se interpreta como el aumento de la puntuación media cuando incrementamos en una unidad el IQ de las madres. Efectivamente, sean la madre-hijo 1 y la madre-hijo 2. Los modelos para ambos son:
+- Interpretación de $\beta_1$: Se interpreta como el aumento de la puntuación media cuando incrementamos en una unidad el IQ de las madres. Efectivamente, sean la madre-hijo 1 y la madre-hijo 2. Los modelos para ambos son:
 
 $$
 \mathrm{E}[kid\_score_1] = \beta_0 + \beta_1 mom\_iq_1 \\
@@ -122,7 +120,7 @@ Restando:
 $$
 \mathrm{E}[kid\_score_1] - \mathrm{E}[kid\_score_2]  = \beta_1 (mom\_iq_1 - mom\_iq_2)
 $$
-Luego si $(mom\_iq_1 - mom\_iq_2 = 1$, entonces $\beta_1 = \mathrm{E}[kid\_score_1] - \mathrm{E}[kid\_score_2]$. El pvalor para $\beta_1$ es muy pequeño, luego $\beta_1$ tiene es significativo.
+Luego si $(mom\_iq_1 - mom\_iq_2 = 1$, entonces $\beta_1 = \mathrm{E}[kid\_score_1] - \mathrm{E}[kid\_score_2]$. El pvalor para $\beta_1$ es muy pequeño, luego $\beta_1$ es significativo.
 
 - Interpretación de $\beta_0$: Se interpreta como la puntuación que obtendría un chico cuya madre tiene IQ=0. En este caso, no tiene mucho sentido interpretar este parámetro. Según el pvalor, es estadísticamente significativo.
 
@@ -247,6 +245,35 @@ legend(70,160, legend = c("mom_hs = si","mom_hs = no"), col = c("blue","red"), l
 ```
 
 
+# Dos regresores cuantitativos
 
+```{r}
+m6 = lm(kid_score ~ mom_iq + mom_age, data = d)
+summary(m6)
+```
 
+- Interpretación de $\beta_1$: Se interpreta como el aumento de la puntuación media cuando incrementamos en una unidad el IQ de las madres y mantenemos constante la edad de las madres. Efectivamente, sean la madre-hijo 1 y la madre-hijo 2. Los modelos para ambos son:
 
+$$
+\mathrm{E}[kid\_score_1] = \beta_0 + \beta_1 mom\_iq_1 + \beta_2 mom\_age_1 \\
+\mathrm{E}[kid\_score_2] = \beta_0 + \beta_1 mom\_iq_2 + \beta_2 mom\_age_2
+$$
+
+Restando:
+
+$$
+\mathrm{E}[kid\_score_1] - \mathrm{E}[kid\_score_2]  = \beta_1 (mom\_iq_1 - mom\_iq_2) + \beta_2 (mom\_age_1 - mom\_age_2)
+$$
+Luego si $(mom\_iq_1 - mom\_iq_2) = 1$ y $(mom\_age_1 - mom\_age_2) = 0$, entonces $\beta_1 = \mathrm{E}[kid\_score_1] - \mathrm{E}[kid\_score_2]$. El pvalor para $\beta_1$ es muy pequeño, luego $\beta_1$ es significativo.
+
+- Interpretación de $\beta_2$: Se interpreta como el aumento de la puntuación media cuando incrementamos en una unidad la edad de las madres y mantenemos constante el IQ de las madres. Procediendo igual que antes, tenemos:
+
+$$
+\mathrm{E}[kid\_score_1] - \mathrm{E}[kid\_score_2]  = \beta_1 (mom\_iq_1 - mom\_iq_2) + \beta_2 (mom\_age_1 - mom\_age_2)
+$$
+
+$$
+\Rightarrow \Delta \mathrm{E}[kid\_score] = \beta_1 \Delta mom\_iq_1 + \beta_2 \Delta mom\_age_1
+$$
+
+Luego si $\Delta mom\_iq = 0$ y $\Delta mom\_age = 1$, entonces $\beta_1 = \Delta \mathrm{E}[kid\_score]$ El pvalor para $\beta_2$ es mayor que 0.05, luego $\beta_2$ no es significativo.

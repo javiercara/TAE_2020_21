@@ -38,7 +38,9 @@ output:
     a. [Análisis de los residuos del modelo](lm_diagnosis.html) [(pdf)](lm_diagnosis.pdf)
 5. Ejemplo
     a. [Ejemplo](lm_ejemplo1.html) [(pdf)](lm_ejemplo1.pdf)
-6. Apéndices
+6. Extensiones del modelo lineal
+    a. [Regresores polinómicos](lm_extensiones_polinomios.html) [(pdf)](lm_extensiones_polinomios.pdf)
+7. Apéndices
     a. [Derivada de un escalar respecto de un vector](apendice_derivadas.html) [(pdf)](apendice_derivadas.pdf)
     b. [Matriz de covarianzas](apendice_derivadas.html) [(pdf)](apendice_derivadas.pdf)
     c. [Variable aleatoria normal](apendice_normal.html) [(pdf)](apendice_normal.pdf)

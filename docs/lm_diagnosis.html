@@ -1519,7 +1519,7 @@ div.tocify {
 <p><span class="math display">\[
 y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \cdots + \beta_k x_{ki} + u_i, \ i = 1,2,\cdots,n
 \]</span></p>
-<p>El modelo se basa en <span class="math inline">\(u_i \sim N(0,\sigma^2)\)</span>, y pueden describirse como:</p>
+<p>El modelo se basa en <span class="math inline">\(u_i \sim N(0,\sigma^2)\)</span>. Esta hipótesis implica:</p>
 <ul>
 <li>Normalidad</li>
 <li>Varianza constante: todos los <span class="math inline">\(u_i\)</span> tienen la misma varianza.</li>
@@ -1537,7 +1537,7 @@ e =y - \hat y = (I-H)y
 <p><span class="math display">\[
 e = (I - H)(X \beta + u) = (I - H)u
 \]</span> ya que <span class="math inline">\(HX = X\)</span>. Por tanto, los errores del modelo y los residuos no son intercambiables, sino que los residuos son una combinación lineal de los errores.</p>
-<p>Por otro lado:</p>
+<p>Debido a que <span class="math inline">\(u \sim N(0,\sigma^2 I)\)</span>, los residuos tienen distribución <span class="math inline">\(u \sim N(0,\sigma^2 (I - H)\)</span> puesto que</p>
 <p><span class="math display">\[
 E[e] = 0
 \]</span></p>
@@ -1548,11 +1548,11 @@ Var(e) = \sigma^2 (I - H)
 <p><span class="math display">\[
 Var(e_i) = \sigma^2(1 - h_{ii}), \quad i = 1,\ldots,n
 \]</span></p>
-<p>donde <span class="math inline">\(h_{ii}\)</span> es el elemento de la diagonal de H. Se definen también los <em>residuos estandarizados</em>:</p>
+<p>donde <span class="math inline">\(h_{ii}\)</span> es el elemento de la diagonal de H. A partir de estos valores se definen los <em>residuos estandarizados</em>:</p>
 <p><span class="math display">\[
 r_i = \frac{e_i}{\hat s_R \sqrt{1 - h_{ii}}}
 \]</span></p>
-<p>que tienen varianza uno.</p>
+<p>que tienen varianza aproximadamente uno ya que la varianza residual es un estimador centrado de la varianza del modelo.</p>
 <p>Los residuos estandarizados se utilizan para comprobar las hipótesis del modelo.</p>
 </div>
 <div id="análisis-gráfico-de-los-residuos" class="section level1">

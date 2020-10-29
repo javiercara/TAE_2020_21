@@ -1,13 +1,13 @@
 ---
-title: "Comprobación de las hipótesis del modelo: diagnosis"
-output: 
+title: 'Comprobación de las hipótesis del modelo: diagnosis'
+output:
   html_document:
-    number_sections: true
-    toc: true
-    toc_float: true
+    number_sections: yes
+    toc: yes
+    toc_float: yes
   pdf_document:
-    number_sections: true
-    toc: true
+    number_sections: yes
+    toc: yes
 ---
 
 
@@ -19,7 +19,7 @@ $$
 y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \cdots + \beta_k x_{ki} + u_i, \ i = 1,2,\cdots,n
 $$
 
-El modelo se basa en $u_i \sim N(0,\sigma^2)$, y pueden describirse como:
+El modelo se basa en $u_i \sim N(0,\sigma^2)$. Esta hipótesis implica:
 
 - Normalidad
 - Varianza constante: todos los $u_i$ tienen la misma varianza.
@@ -45,7 +45,7 @@ e = (I - H)(X \beta + u) = (I - H)u
 $$
 ya que $HX = X$. Por tanto, los errores del modelo y los residuos no son intercambiables, sino que los residuos son una combinación lineal de los errores. 
 
-Por otro lado:
+Debido a que $u \sim N(0,\sigma^2 I)$, los residuos tienen distribución $u \sim N(0,\sigma^2 (I - H)$ puesto que
 
 $$
 E[e] = 0
@@ -61,13 +61,13 @@ $$
 Var(e_i) = \sigma^2(1 - h_{ii}), \quad i = 1,\ldots,n
 $$
 
-donde $h_{ii}$ es el elemento de la diagonal de H. Se definen también los *residuos estandarizados*:
+donde $h_{ii}$ es el elemento de la diagonal de H. A partir de estos valores se definen los *residuos estandarizados*:
 
 $$
 r_i = \frac{e_i}{\hat s_R \sqrt{1 - h_{ii}}}
 $$
 
-que tienen varianza uno.
+que tienen varianza aproximadamente uno ya que la varianza residual es un estimador centrado de la varianza del modelo.
 
 Los residuos estandarizados se utilizan para comprobar las hipótesis del modelo.
 
