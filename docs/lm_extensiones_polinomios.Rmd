@@ -48,6 +48,22 @@ plot(d$age,d$wage, cex = 0.5, col = "darkgrey")
 
 # Regresión polinómica
 
+## Introducción
+
+Utilizar una recta no es satisfactorio
+
+```{r}
+m0 = lm(wage ~ age, data = d)
+summary(m0)
+```
+
+```{r}
+plot(d$age,d$wage, cex = 0.5, col = "darkgrey")
+abline(m0, col = "red", lwd = 2)
+```
+
+No se ajusta bien a los datos por lo que el $R^2$ es pequeño. 
+
 ## Modelo
 
 $$
@@ -142,6 +158,10 @@ anova(mk3,mk4)
 
 
 ```{r}
+anova(mk4,mk5)
+```
+
+```{r}
 anova(mk3,mk5)
 ```
 
@@ -172,7 +192,7 @@ $$
 \sum _{i=1}^n  P_r(x_i)  P_s(x_i) = 0, \ r \neq s, \ r,s = 1,2,\ldots,k
 $$
 
-es decir, son polinomios ortogonales. El modelo sigue siendo $y = X\beta + \epsilon$, con
+es decir, son polinomios ortogonales. El modelo sigue siendo $y = X\beta + u$, con
 
 $$
 X = 
@@ -189,10 +209,18 @@ Por tanto:
 $$
 X^t X =
 \begin{bmatrix}
-1 & 0 & \cdots & 0 \\
+n & 0 & \cdots & 0 \\
 0 & \sum_{i=1}^n P_1^2(x_i) & \cdots & 0 \\
 \vdots & \vdots & & \vdots \\
 0 & 0 & \cdots & \sum_{i=1}^n P_k^2(x_i) \\
+\end{bmatrix}
+, \quad
+X^t y =
+\begin{bmatrix}
+\sum_{i=1}^n y_i \\
+\sum_{i=1}^n P_1(x_i) y_i \\
+\vdots \\
+\sum_{i=1}^n P_k(x_i) y_i  \\
 \end{bmatrix}
 $$
 
@@ -202,9 +230,15 @@ $$
 \hat \beta_j = \frac{\sum_{i=1}^n P_j(x_i) y_i}{\sum_{i=1}^n P_j^2(x_i)}
 $$
 
+Una consecuencia importante es que como $Var[\hat \beta] = \sigma^2 (x^T X)^{-1}$, se tiene que:
+
+$$
+Var[\hat \beta_j] = \frac{\sigma^2}{\sum_{i=1}^n P_j^2(x_i)}
+$$
+
 ## Propiedades
 
-- Los parámetros del modelo ortogonal no coincide con los del otro modelo polinómico:
+- Los parámetros del modelo ortogonal no coincide con los del modelo polinómico no ortogonal:
 
 ```{r}
 mk4a = lm(wage ~ poly(age, degree = 6), data = d)
@@ -221,3 +255,9 @@ predict(mk4, newdata = data.frame(age = 22), interval = "confidence")
 predict(mk4a, newdata = data.frame(age = 22), interval = "confidence")
 ```
 
+- Los regresores se van añadiendo sin modificar las estimaciones obtenidas para los parámetros ya obtenidos:
+
+```{r}
+summary(lm(wage ~ poly(age, degree = 3), data = d))
+summary(lm(wage ~ poly(age, degree = 4), data = d))
+```

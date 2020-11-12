@@ -1,0 +1,505 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Extensiones del modelo lineal: Regression splines},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\title{Extensiones del modelo lineal: Regression splines}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\hypertarget{datos}{%
+\section{Datos}\label{datos}}
+
+Datos: Wage
+
+Wage and other data for a group of 3000 male workers in the Mid-Atlantic
+region.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d =}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"datos/Wage.csv"}\NormalTok{)}
+\NormalTok{d =}\StringTok{ }\NormalTok{d[d}\OperatorTok{$}\NormalTok{wage}\OperatorTok{<}\DecValTok{250}\NormalTok{,]}
+\KeywordTok{plot}\NormalTok{(d}\OperatorTok{$}\NormalTok{age,d}\OperatorTok{$}\NormalTok{wage, }\DataTypeTok{cex =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{col =} \StringTok{"darkgrey"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{lm_extensiones_splines_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\hypertarget{b-splines-o-basis-splines-cuxfabicos}{%
+\section{B-splines o Basis-splines
+cúbicos}\label{b-splines-o-basis-splines-cuxfabicos}}
+
+\hypertarget{polinomios-cuxfabicos-a-trozos}{%
+\subsection{Polinomios cúbicos a
+trozos}\label{polinomios-cuxfabicos-a-trozos}}
+
+\begin{itemize}
+\tightlist
+\item
+  Se divide el rango de \emph{X} por medio de \emph{k} puntos (o nodos),
+  \(c_1 < c_2 < \cdots < c_k\).
+\item
+  En cada intervalo se estima un polinomio de orden 3.
+\end{itemize}
+
+\[
+\begin{equation*}
+y_i = \left\{
+\begin{array}{cl}
+\beta_{00} + \beta_{10} x_i + \beta_{20} x_i^2 + \beta_{30} x_i^3 + u_i & \text{si } x < c_1,\\
+\beta_{01} + \beta_{11} x_i + \beta_{21} x_i^2 + \beta_{31} x_i^3 + u_i & \text{si } c_1 \leq x \leq c_2, \\
+\beta_{02} + \beta_{12} x_i + \beta_{22} x_i^2 + \beta_{32} x_i^3 + u_i & \text{si } c_2 \leq x \leq c_3, \\
+\ldots & \ldots, \\
+\beta_{0k} + \beta_{1k} x_i + \beta_{2k} x_i^2 + \beta_{3k} x_i^3 + u_i & \text{si } x \geq c_k, \\
+\end{array} \right.
+\end{equation*}
+\]
+
+\begin{itemize}
+\item
+  Por tanto, hay \emph{(k + 1)(3 + 1)} parámetros a estimar o grados de
+  libertad (son las incógnitas).
+\item
+  En los puntos \(c_1, c_2, \cdots, c_k\) los polinomios han de ser
+  continuos y suaves (segunda derivada continua). Por tanto, se añaden
+  \emph{3k} ecuaciones en cada nodo (función continua, primera derivada
+  continua, segunda derivada continua).
+\item
+  En total se tienen \emph{(k + 1)(3 + 1) - 3k = k + 4} grados de
+  libertad.
+\item
+  Por tanto, un modelo que utiliza splines de orden 3 y cuatro nodos (k
+  = 4) tiene 8 grados de libertad.
+\item
+  Si se utilizan polinomios de orden \emph{d} en cada trozo, el numero
+  de grados de libertad sería (k+1)(d+1) - k*d = k + d + 1.
+\end{itemize}
+
+\hypertarget{funciones-base}{%
+\subsection{Funciones base}\label{funciones-base}}
+
+Estimar las ecuaciones anteriores con las restricciones correspondientes
+no es fácil. Una alternativa es usar \emph{funciones base}.
+
+Es fácil comprobar que el siguiente modelo cumple las condiciones de las
+splines cúbicas:
+
+\[
+y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3  + \beta_{4} h_1(x_i) + \cdots + \beta_{3+k} h_k(x_i) + u_i
+\]
+
+donde:
+
+\[
+\begin{equation*}
+h_i(x) = \left\{
+\begin{array}{cl}
+(x - c_i)^3 & \text{si } x > c_i,\\
+0 & \text{si } x \leq c_i.
+\end{array} \right.
+\end{equation*}
+\]
+
+Por ejemplo, imaginemos un solo nodo en \(x_i = a\). A la izquierda de a
+la spline es:
+
+\[
+y_{1,i} = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 
+\]
+
+y a la derecha de a sería:
+
+\[
+y_{2,i} = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + (x_i - a)^3
+\]
+
+Por tanto en \(x_i = a\) se verifica \(y_{1,i} = y_{2,i}\),
+\(y_{1,i}' = y_{2,i}'\), \(y_{1,i}'' = y_{2,i}''\).
+
+Por otro lado hemos visto que se necesitan \emph{k+4} parámetros en
+total para una spline cúbica con \emph{k} nodos. Por eso tenemos que
+llegar hasta \(\beta_{k+3}\) (el otro parámetro sería \(\beta_0\)).
+
+Este polinomio también se puede expresar utilizando una base de tamaño
+\emph{k+3}:
+
+\[
+p(x) = a_0 + a_1 b_1(x) + a_2 b_2(x) + \cdots + a_{k+3} b_{k+3}(x)
+\]
+
+Las \(b_k\) son las funciones base.
+
+\hypertarget{funciones-base-en-r}{%
+\subsection{Funciones base en R}\label{funciones-base-en-r}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(splines)}
+\end{Highlighting}
+\end{Shaded}
+
+La función \emph{bs()} define automaticamente una matriz con las
+funciones de base necesarias a partir de los nodos. Se puede hacer de
+dos maneras:
+
+\begin{itemize}
+\tightlist
+\item
+  Especificando los nodos:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(}\KeywordTok{bs}\NormalTok{(d}\OperatorTok{$}\NormalTok{age, }\DataTypeTok{knots =} \KeywordTok{c}\NormalTok{(}\DecValTok{25}\NormalTok{, }\DecValTok{40}\NormalTok{, }\DecValTok{60}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2921    6
+\end{verbatim}
+
+Tres nodos y splines cúbicos originan una base de tamaño \emph{k+3}
+(\emph{k} nodos originan \emph{k+4} parámetros y \emph{k+3} funciones
+base!):
+
+\begin{itemize}
+\tightlist
+\item
+  Especificando los grados de libertad:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# k = df - 3, se utilizan quantiles para definir los nodos}
+\KeywordTok{attr}\NormalTok{(}\KeywordTok{bs}\NormalTok{(d}\OperatorTok{$}\NormalTok{age, }\DataTypeTok{df =} \DecValTok{6}\NormalTok{), }\StringTok{"knots"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 25% 50% 75% 
+##  33  42  50
+\end{verbatim}
+
+\hypertarget{estimacion-del-modelo}{%
+\subsection{Estimacion del modelo}\label{estimacion-del-modelo}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nodos =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{25}\NormalTok{,}\DecValTok{40}\NormalTok{,}\DecValTok{60}\NormalTok{)}
+\NormalTok{m1 =}\StringTok{ }\KeywordTok{lm}\NormalTok{(wage }\OperatorTok{~}\StringTok{ }\KeywordTok{bs}\NormalTok{(age, }\DataTypeTok{knots =}\NormalTok{ nodos), }\DataTypeTok{data =}\NormalTok{ d)}
+\KeywordTok{summary}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = wage ~ bs(age, knots = nodos), data = d)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -93.271 -20.467  -2.006  17.424 116.146 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)               59.978      7.151   8.388  < 2e-16 ***
+## bs(age, knots = nodos)1    5.534      9.484   0.583 0.559625    
+## bs(age, knots = nodos)2   44.434      7.280   6.104 1.17e-09 ***
+## bs(age, knots = nodos)3   55.949      8.149   6.866 8.04e-12 ***
+## bs(age, knots = nodos)4   52.762      8.119   6.498 9.53e-11 ***
+## bs(age, knots = nodos)5   40.726     10.942   3.722 0.000201 ***
+## bs(age, knots = nodos)6   25.289     14.470   1.748 0.080630 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 30.17 on 2914 degrees of freedom
+## Multiple R-squared:  0.1096, Adjusted R-squared:  0.1077 
+## F-statistic: 59.76 on 6 and 2914 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\hypertarget{prediccion}{%
+\subsection{Prediccion}\label{prediccion}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age_grid =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \KeywordTok{min}\NormalTok{(d}\OperatorTok{$}\NormalTok{age), }\DataTypeTok{to =} \KeywordTok{max}\NormalTok{(d}\OperatorTok{$}\NormalTok{age), }\DataTypeTok{by =} \DecValTok{1}\NormalTok{)}
+\NormalTok{yp =}\StringTok{ }\KeywordTok{predict}\NormalTok{(m1, }\DataTypeTok{newdata =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{age =}\NormalTok{ age_grid), }\DataTypeTok{interval =} \StringTok{"confidence"}\NormalTok{, }\DataTypeTok{level =} \FloatTok{0.95}\NormalTok{)}
+\NormalTok{yp1 =}\StringTok{ }\KeywordTok{predict}\NormalTok{(m1, }\DataTypeTok{newdata =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{age =}\NormalTok{ age_grid), }\DataTypeTok{interval =} \StringTok{"prediction"}\NormalTok{, }\DataTypeTok{level =} \FloatTok{0.95}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(d}\OperatorTok{$}\NormalTok{age, d}\OperatorTok{$}\NormalTok{wage, }\DataTypeTok{col =} \StringTok{"gray"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, yp[,}\StringTok{"fit"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, yp[,}\StringTok{"lwr"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, yp[,}\StringTok{"upr"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, yp1[,}\StringTok{"lwr"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, yp1[,}\StringTok{"upr"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{)}
+\CommentTok{# incluimos los nodos}
+\NormalTok{nodos_pred =}\StringTok{ }\KeywordTok{predict}\NormalTok{(m1, }\DataTypeTok{newdata =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{age =}\NormalTok{ nodos))}
+\KeywordTok{points}\NormalTok{(nodos, nodos_pred, }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{lm_extensiones_splines_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\hypertarget{splines-cubicas-naturales}{%
+\section{Splines cubicas naturales}\label{splines-cubicas-naturales}}
+
+\hypertarget{definciuxf3n}{%
+\subsection{Definción}\label{definciuxf3n}}
+
+\begin{itemize}
+\item
+  Las splines tienen el problema de que en los extremos las predicciones
+  tienen varianza elevada.
+\item
+  Esto se debe a que fuera del rango de la variable (por debajo del
+  minimo y por encima del máximo), la spline sería cúbica.
+\item
+  Una opción es obligar a que la spline sea lineal en estas zonas. Esto
+  corrige la varianza alta de los bordes.
+\end{itemize}
+
+\[
+\begin{equation*}
+y_i = \left\{
+\begin{array}{cl}
+\beta_{00} + \beta_{10} x_i + u_i & \text{si } x < min(x_i),\\
+\beta_{00} + \beta_{10} x_i + \beta_{20} x_i^2 + \cdots + \beta_{d0} x_i^d + u_i & \text{si } min(x_i) \leq x \leq c_1, \\
+\beta_{01} + \beta_{11} x_i + \beta_{21} x_i^2 + \cdots + \beta_{d1} x_i^d + u_i & \text{si } c_1 \leq x \leq c_2, \\
+\ldots & \ldots, \\
+\beta_{0k} + \beta_{1k} x_i + \beta_{2k} x_i^2 + \cdots + \beta_{dk} x_i^d + u_i & \text{si } c_k \leq x \leq max(x_i), \\
+\beta_{0k} + \beta_{1k} x_i + u_i & \text{si } x \geq max(x_i), \\
+\end{array} \right.
+\end{equation*}
+\]
+
+\begin{itemize}
+\item
+  Para conseguir estas rectas se obliga a que la segunda derivada en los
+  bordes sea cero (si la primera derivada es distinta de cero y la
+  segunda es cero, tenemos una recta).
+\item
+  Luego se añade 1 restricción en cada extremo, en total hay k + 4 - 2 =
+  k + 2 grados de libertad, k + 1 funciones base.
+\end{itemize}
+
+\hypertarget{splines-naturales-en-r}{%
+\subsection{Splines naturales en R}\label{splines-naturales-en-r}}
+
+\begin{itemize}
+\tightlist
+\item
+  En R, se definen splines cúbicas naturales por medio de la función
+  \emph{ns()}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(}\KeywordTok{ns}\NormalTok{(d}\OperatorTok{$}\NormalTok{age, }\DataTypeTok{knots =} \KeywordTok{c}\NormalTok{(}\DecValTok{25}\NormalTok{, }\DecValTok{40}\NormalTok{, }\DecValTok{60}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2921    4
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Se estima el modelo:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nodos =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{25}\NormalTok{, }\DecValTok{40}\NormalTok{,}\DecValTok{50}\NormalTok{,}\DecValTok{55}\NormalTok{, }\DecValTok{60}\NormalTok{)}
+\NormalTok{m2 =}\StringTok{ }\KeywordTok{lm}\NormalTok{(wage }\OperatorTok{~}\StringTok{ }\KeywordTok{ns}\NormalTok{(age, }\DataTypeTok{knots =}\NormalTok{ nodos), }\DataTypeTok{data =}\NormalTok{ d)}
+\KeywordTok{summary}\NormalTok{(m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = wage ~ ns(age, knots = nodos), data = d)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -93.611 -20.517  -1.909  17.590 115.600 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)               57.149      4.127  13.849  < 2e-16 ***
+## ns(age, knots = nodos)1   57.792      4.079  14.168  < 2e-16 ***
+## ns(age, knots = nodos)2   56.458      5.271  10.711  < 2e-16 ***
+## ns(age, knots = nodos)3   54.657      4.631  11.801  < 2e-16 ***
+## ns(age, knots = nodos)4   38.520      5.581   6.902 6.26e-12 ***
+## ns(age, knots = nodos)5   76.948     10.536   7.304 3.60e-13 ***
+## ns(age, knots = nodos)6    5.657      9.356   0.605    0.545    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 30.17 on 2914 degrees of freedom
+## Multiple R-squared:  0.1099, Adjusted R-squared:  0.108 
+## F-statistic: 59.94 on 6 and 2914 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\hypertarget{predicciuxf3n}{%
+\subsection{Predicción}\label{predicciuxf3n}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ypn =}\StringTok{ }\KeywordTok{predict}\NormalTok{(m2, }\DataTypeTok{newdata =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{age =}\NormalTok{ age_grid), }\DataTypeTok{interval =} \StringTok{"confidence"}\NormalTok{, }\DataTypeTok{level =} \FloatTok{0.95}\NormalTok{)}
+\NormalTok{ypn1 =}\StringTok{ }\KeywordTok{predict}\NormalTok{(m2, }\DataTypeTok{newdata =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{age =}\NormalTok{ age_grid), }\DataTypeTok{interval =} \StringTok{"prediction"}\NormalTok{, }\DataTypeTok{level =} \FloatTok{0.95}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(d}\OperatorTok{$}\NormalTok{age, d}\OperatorTok{$}\NormalTok{wage, }\DataTypeTok{col =} \StringTok{"gray"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, ypn[,}\StringTok{"fit"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, ypn[,}\StringTok{"lwr"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, ypn[,}\StringTok{"upr"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, ypn1[,}\StringTok{"lwr"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(age_grid, ypn1[,}\StringTok{"upr"}\NormalTok{], }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{)}
+\CommentTok{# incluimos los nodos}
+\NormalTok{nodos_pred =}\StringTok{ }\KeywordTok{predict}\NormalTok{(m2, }\DataTypeTok{newdata =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{age =}\NormalTok{ nodos))}
+\KeywordTok{points}\NormalTok{(nodos, nodos_pred, }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{lm_extensiones_splines_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\hypertarget{seleccion-del-numero-de-nodos-para-splines-cubicas}{%
+\section{Seleccion del numero de nodos para splines
+cubicas}\label{seleccion-del-numero-de-nodos-para-splines-cubicas}}
+
+Se van a utilizar B-splines cubicas.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# numero maximo de funciones base => numero maximo de nodos = nmu. max. fb - 3 }
+\NormalTok{num_max_df =}\StringTok{ }\DecValTok{9}
+
+\NormalTok{r2_adj =}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, num_max_df)}
+\CommentTok{# empezamos en 3 porque cero nodos son 3 df, un polinomio cubico}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{3}\OperatorTok{:}\NormalTok{num_max_df)\{}
+\NormalTok{  m =}\StringTok{ }\KeywordTok{lm}\NormalTok{(wage }\OperatorTok{~}\StringTok{ }\KeywordTok{bs}\NormalTok{(age, }\DataTypeTok{df =}\NormalTok{ i), }\DataTypeTok{data =}\NormalTok{ d)}
+\NormalTok{  m_summary =}\StringTok{ }\KeywordTok{summary}\NormalTok{(m)}
+\NormalTok{  r2_adj[i] =}\StringTok{ }\NormalTok{m_summary}\OperatorTok{$}\NormalTok{adj.r.squared}
+\NormalTok{\}}
+
+\KeywordTok{plot}\NormalTok{(}\DecValTok{3}\OperatorTok{:}\NormalTok{num_max_df, r2_adj[}\DecValTok{3}\OperatorTok{:}\NormalTok{num_max_df], }\DataTypeTok{type =} \StringTok{"b"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{lm_extensiones_splines_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Luego colocar un nodo en el centro parece lo más adecuado.
+
+\end{document}

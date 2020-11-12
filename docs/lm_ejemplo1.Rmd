@@ -173,12 +173,6 @@ abline(lm(sales ~ radio, data = d))
 Parece que la relación con TV es de orden 2 o 3:
 
 ```{r}
-m5a = lm(sales ~ TV + I(TV^2) + I(TV^3), data = d)
-TV_grid = seq(from = min(d$TV), to = max(d$TV), by = 1)
-```
-
-
-```{r}
 m5 = lm(sales ~ TV * radio + I(TV^2), data = d)
 summary(m5)
 ```

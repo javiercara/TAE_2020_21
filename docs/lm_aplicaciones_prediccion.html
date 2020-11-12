@@ -1732,7 +1732,8 @@ kid\_score = \hat \beta_0 + \hat \beta_1 mom\_iq + \hat \beta_2 mom\_hssi + \hat
 \]</span></p>
 <pre class="r"><code>xp = matrix(c(1, 130, 0, 25, 0, 1, 0), ncol = 1)
 beta_e = coef(m2)
-sR2 = sum(resid(m2)^2)/(n-6-1)
+k = 6 # numero de regresores
+sR2 = sum(resid(m2)^2)/(n-k-1)
 X = model.matrix(m2)
 mat = t(xp) %*% solve(t(X) %*% X) %*% xp
 # prediccion del valor medio
@@ -1740,7 +1741,7 @@ mat = t(xp) %*% solve(t(X) %*% X) %*% xp
 <pre><code>##          [,1]
 ## [1,] 103.0423</code></pre>
 <pre class="r"><code># intervalo de confianza
-yp_medio[1,1] + c(-1,1)*qt(0.975,n-6-1)*sqrt(sR2*(mat[1,1]))</code></pre>
+yp_medio[1,1] + c(-1,1)*qt(0.975,n-k-1)*sqrt(sR2*(mat[1,1]))</code></pre>
 <pre><code>## [1]  95.74381 110.34083</code></pre>
 <ul>
 <li>En R:</li>
@@ -1752,7 +1753,7 @@ yp_medio[1,1] + c(-1,1)*qt(0.975,n-6-1)*sqrt(sR2*(mat[1,1]))</code></pre>
 </div>
 <div id="intervalo-de-prediccion-1" class="section level3">
 <h3><span class="header-section-number">5.2.2</span> Intervalo de prediccion</h3>
-<pre class="r"><code>(yp = yp_medio[1,1] + c(-1,1)*qt(0.975,n-6-1)*sqrt(sR2*(1 + mat[1,1])))</code></pre>
+<pre class="r"><code>(yp = yp_medio[1,1] + c(-1,1)*qt(0.975,n-k-1)*sqrt(sR2*(1 + mat[1,1])))</code></pre>
 <pre><code>## [1]  66.65286 139.43178</code></pre>
 <ul>
 <li>En R:</li>
@@ -1780,7 +1781,7 @@ for (b in 1:B){
 <p>El intervalo de confianza para el valor medio es:</p>
 <pre class="r"><code>quantile(yp_medio_b, probs = c(0.025, 0.975))</code></pre>
 <pre><code>##      2.5%     97.5% 
-##  95.98099 110.15576</code></pre>
+##  95.38594 109.66291</code></pre>
 </div>
 <div id="intervalo-de-predicción-1" class="section level2">
 <h2><span class="header-section-number">6.2</span> Intervalo de predicción</h2>
@@ -1790,20 +1791,21 @@ for (b in 1:B){
 \]</span></p>
 <p>En este caso no se puede utilizar bootstrap. El método bootstrap se utiliza para calcular intervalos de confianza y se basa en remuestrear residuos. Ahora tenemos una variable aleatoria, no unos residuos. Podemos utilizar simulaciones de la variable aleatoria:</p>
 <pre class="r"><code># la variable epsilon_p tiene varianza sR2*(1+mat)
-sR2 = sum(resid(m2)^2)/(n-2)
+sR2 = sum(resid(m2)^2)/(n-k-1)
 epsilon_var = sR2*(1 + mat[1,1])
 # simulamos la variable epsilon
+set.seed(123)
 epsilon = rnorm(1000, mean = 0, sd = sqrt(epsilon_var))
 xp = matrix(c(1, 130, 0, 25, 0, 1, 0), ncol = 1)
 yp = t(xp) %*% coef(m2)
 yp_b = yp[1,1] + epsilon
 # intervalo de predicccion
 quantile(yp_b, probs = c(0.025, 0.975))</code></pre>
-<pre><code>##     2.5%    97.5% 
-##  67.7419 140.2347</code></pre>
+<pre><code>##      2.5%     97.5% 
+##  67.09684 140.77128</code></pre>
 <p>Aunque en este caso, al ser una distribución normal, lo más sencillo es:</p>
 <pre class="r"><code>qnorm(c(0.025,0.975), mean = yp, sd = sqrt(epsilon_var))</code></pre>
-<pre><code>## [1]  66.96661 139.11804</code></pre>
+<pre><code>## [1]  66.7560 139.3286</code></pre>
 </div>
 </div>
 

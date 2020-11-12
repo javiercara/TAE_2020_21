@@ -257,13 +257,14 @@ $$
 ```{r}
 xp = matrix(c(1, 130, 0, 25, 0, 1, 0), ncol = 1)
 beta_e = coef(m2)
-sR2 = sum(resid(m2)^2)/(n-6-1)
+k = 6 # numero de regresores
+sR2 = sum(resid(m2)^2)/(n-k-1)
 X = model.matrix(m2)
 mat = t(xp) %*% solve(t(X) %*% X) %*% xp
 # prediccion del valor medio
 (yp_medio = t(xp) %*% beta_e)
 # intervalo de confianza
-yp_medio[1,1] + c(-1,1)*qt(0.975,n-6-1)*sqrt(sR2*(mat[1,1]))
+yp_medio[1,1] + c(-1,1)*qt(0.975,n-k-1)*sqrt(sR2*(mat[1,1]))
 ```
 
 - En R:
@@ -276,7 +277,7 @@ xp1 = data.frame(mom_iq = 130, mom_hs = "no", mom_age = 25, mom_work = "trabaja1
 ### Intervalo de prediccion
 
 ```{r}
-(yp = yp_medio[1,1] + c(-1,1)*qt(0.975,n-6-1)*sqrt(sR2*(1 + mat[1,1])))
+(yp = yp_medio[1,1] + c(-1,1)*qt(0.975,n-k-1)*sqrt(sR2*(1 + mat[1,1])))
 ```
 
 - En R:
@@ -321,9 +322,10 @@ En este caso no se puede utilizar bootstrap. El método bootstrap se utiliza par
 
 ```{r}
 # la variable epsilon_p tiene varianza sR2*(1+mat)
-sR2 = sum(resid(m2)^2)/(n-2)
+sR2 = sum(resid(m2)^2)/(n-k-1)
 epsilon_var = sR2*(1 + mat[1,1])
 # simulamos la variable epsilon
+set.seed(123)
 epsilon = rnorm(1000, mean = 0, sd = sqrt(epsilon_var))
 xp = matrix(c(1, 130, 0, 25, 0, 1, 0), ncol = 1)
 yp = t(xp) %*% coef(m2)
