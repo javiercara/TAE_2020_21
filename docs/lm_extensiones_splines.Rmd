@@ -35,14 +35,14 @@ plot(d$age,d$wage, cex = 0.5, col = "darkgrey")
 
 $$
 \begin{equation*}
-y_i = \left\{
-\begin{array}{cl}
+y_i = 
+\begin{cases}
 \beta_{00} + \beta_{10} x_i + \beta_{20} x_i^2 + \beta_{30} x_i^3 + u_i & \text{si } x < c_1,\\
 \beta_{01} + \beta_{11} x_i + \beta_{21} x_i^2 + \beta_{31} x_i^3 + u_i & \text{si } c_1 \leq x \leq c_2, \\
 \beta_{02} + \beta_{12} x_i + \beta_{22} x_i^2 + \beta_{32} x_i^3 + u_i & \text{si } c_2 \leq x \leq c_3, \\
 \ldots & \ldots, \\
-\beta_{0k} + \beta_{1k} x_i + \beta_{2k} x_i^2 + \beta_{3k} x_i^3 + u_i & \text{si } x \geq c_k, \\
-\end{array} \right.
+\beta_{0k} + \beta_{1k} x_i + \beta_{2k} x_i^2 + \beta_{3k} x_i^3 + u_i & \text{si } x \geq c_k,
+\end{cases}
 \end{equation*}
 $$
 
@@ -68,11 +68,11 @@ donde:
 
 $$
 \begin{equation*}
-h_i(x) = \left\{
-\begin{array}{cl}
+h_i(x) = 
+\begin{cases}
 (x - c_i)^3 & \text{si } x > c_i,\\
 0 & \text{si } x \leq c_i.
-\end{array} \right.
+\end{cases} 
 \end{equation*}
 $$
 
@@ -163,15 +163,15 @@ points(nodos, nodos_pred, col = "blue")
 
 $$
 \begin{equation*}
-y_i = \left\{
-\begin{array}{cl}
+y_i =
+\begin{cases}
 \beta_{00} + \beta_{10} x_i + u_i & \text{si } x < min(x_i),\\
 \beta_{00} + \beta_{10} x_i + \beta_{20} x_i^2 + \cdots + \beta_{d0} x_i^d + u_i & \text{si } min(x_i) \leq x \leq c_1, \\
 \beta_{01} + \beta_{11} x_i + \beta_{21} x_i^2 + \cdots + \beta_{d1} x_i^d + u_i & \text{si } c_1 \leq x \leq c_2, \\
 \ldots & \ldots, \\
 \beta_{0k} + \beta_{1k} x_i + \beta_{2k} x_i^2 + \cdots + \beta_{dk} x_i^d + u_i & \text{si } c_k \leq x \leq max(x_i), \\
-\beta_{0k} + \beta_{1k} x_i + u_i & \text{si } x \geq max(x_i), \\
-\end{array} \right.
+\beta_{0k} + \beta_{1k} x_i + u_i & \text{si } x \geq max(x_i),
+\end{cases}
 \end{equation*}
 $$
 

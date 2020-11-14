@@ -294,7 +294,7 @@ m2 = lm(kid_score ~ mom_hs + mom_iq, data = d)
 m = 2
 (F_0 = ((VNE2 - VNE)/(k-m))/(VNE/(n-k-1)))
 # F_alfa
-qf(0.05, k-m, n-k-1)
+qf(0.95, k-m, n-k-1)
 # pvalor
 1-pf(F_0, k-m, n-k-1)
 ```

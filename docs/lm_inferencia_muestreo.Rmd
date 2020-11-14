@@ -165,13 +165,13 @@ $$
 donde $\hat \beta^* = [\hat \beta_1 \ \hat \beta_2 \ \cdots \ \hat \beta_k]^T$. Faltaría el estimador de $\beta_0$ que se obtiene con la ecuación
 
 $$
-\hat \beta_0 = \bar y - \bar x \hat \beta^*
+\hat \beta_0 = \bar y - \bar x^T \hat \beta^*
 $$
 
 dónde $\bar x = [\bar x_1 \ \bar x_2 \ \cdots \ \bar x_n]^T$. Se puede demostrar que
 
 $$
-\hat \beta^* \sim N \left( \beta^*, \frac{\sigma^2}{n}S_{XX}^{-1} \right), \quad \hat \beta_0 \sim N \left( \beta_0, \frac{\sigma^2}{n} \left( 1 + \bar x^T S_{XX}^{-1} \bar x \right) \right)
+\hat \beta^* \sim N \left( \beta^*, \frac{\sigma^2}{n-1}S_{XX}^{-1} \right), \quad \hat \beta_0 \sim N \left( \beta_0, \sigma^2 \left( \frac{1}{n} + \frac{1}{n-1} \bar x^T S_{XX}^{-1} \bar x \right) \right)
 $$
 
 En la primera ecuación $\beta^* = [\beta_1 \ \beta_2 \ \cdots \ \beta_k]^T$.

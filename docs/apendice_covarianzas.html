@@ -366,24 +366,44 @@ summary {
 </div>
 
 
-<p>Sean k+1 variables, con <span class="math inline">\(n\)</span> observaciones cada una:</p>
+<p>Sean <span class="math inline">\(m+1\)</span> variables, con <span class="math inline">\(n\)</span> observaciones cada una:</p>
 <p><span class="math display">\[
 \begin{matrix}
-y &amp; x_{1} &amp; x_{2} &amp; \cdots &amp; x_{k} \\
+y &amp; x_{1} &amp; x_{2} &amp; \cdots &amp; x_{m} \\
 \hline
-y_1 &amp; x_{11} &amp; x_{21} &amp; \cdots  &amp; x_{k1} \\
-y_2 &amp; x_{12} &amp; x_{22} &amp; \cdots  &amp; x_{k2} \\
+y_1 &amp; x_{11} &amp; x_{21} &amp; \cdots  &amp; x_{m1} \\
+y_2 &amp; x_{12} &amp; x_{22} &amp; \cdots  &amp; x_{m2} \\
 \cdots &amp;\cdots &amp; \cdots &amp; \cdots  &amp; \cdots \\
-y_n &amp; x_{1n} &amp; x_{2n} &amp; \cdots  &amp; x_{kn} \\
+y_n &amp; x_{1n} &amp; x_{2n} &amp; \cdots  &amp; x_{mn} \\
 \end{matrix}
 \]</span></p>
-<p>se define la covarianza entre las variables <span class="math inline">\(x_j\)</span> e <span class="math inline">\(y\)</span> como</p>
+<p>se define la covarianza entre las variables <span class="math inline">\(x_j\)</span> e <span class="math inline">\(y\)</span> como:</p>
 <p><span class="math display">\[
-cov(x_{j},y) = S_{jy} = \frac{\sum_{i}(x_{ji} - \bar x_j)(y_i - \bar y)}{n-1}, \quad j \in [1,k], \quad i \in [1,n]
+cov(x_{j},y) = S_{jy} = \frac{\sum_{i=1}^{n}(x_{ji} - \bar x_j)(y_i - \bar y)}{n-1}, \quad j \in [1,m], \quad i \in [1,n]
 \]</span></p>
-<p>y la covarianza entre las variables <span class="math inline">\(x_r\)</span> e <span class="math inline">\(x_s\)</span> como</p>
+<p>y la covarianza entre las variables <span class="math inline">\(x_j\)</span> e <span class="math inline">\(x_k\)</span> como:</p>
 <p><span class="math display">\[
-cov(x_{j},x_{k}) = S_{jk} = \frac{\sum_{i}(x_{ji} - \bar x_j)(x_{ki} - \bar x_{k})}{n-1}, \quad j \in [1,k], \quad i \in [1,n]
+cov(x_{j},x_{k}) = S_{jk} = \frac{\sum_{i=1}^{n}(x_{ji} - \bar x_j)(x_{ki} - \bar x_{k})}{n-1}, \quad j,k \in [1,m], \quad i \in [1,n]
+\]</span></p>
+<p>Se define la matriz de covarianzas para <span class="math inline">\(x_j\)</span> y <span class="math inline">\(x_k\)</span> como:</p>
+<p><span class="math display">\[
+S_{xx} =
+\begin{bmatrix}
+S_{11} &amp; S_{12} &amp; \cdots &amp; S_{1m} \\
+S_{21} &amp; S_{22} &amp; \cdots &amp; S_{2m} \\
+\cdots &amp; \cdots &amp; \cdots &amp; \cdots \\
+S_{m1} &amp; S_{m2} &amp; \cdots &amp; S_{mm} \\
+\end{bmatrix}
+\]</span></p>
+<p>Se define la matriz de covarianzas entre <span class="math inline">\(x_j\)</span> e <span class="math inline">\(y\)</span> como:</p>
+<p><span class="math display">\[
+S_{xy} =
+\begin{bmatrix}
+S_{1y} \\
+S_{2y} \\
+\cdots \\
+S_{my} \\
+\end{bmatrix}
 \]</span></p>
 
 
